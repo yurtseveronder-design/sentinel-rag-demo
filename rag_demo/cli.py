@@ -17,6 +17,9 @@ def main(argv=None):
     p.add_argument("--poison", metavar="NAME", help="add docs/poisoned/NAME to the corpus, e.g. classic.md")
     p.add_argument("--report", action="store_true", help="run every poisoned document and print a table")
     args = p.parse_args(argv)
+    if not (Path(args.docs) / "finance_policy.md").exists():
+        print(f"error: no documents found in {args.docs}. Install with 'pip install -e .' from a checkout, or pass --docs DIR.", file=sys.stderr)
+        return 2
     guard = None if args.unprotected else Guard(
         os.getenv("SENTINEL_URL", "http://127.0.0.1:8000"), os.getenv("SENTINEL_API_KEY", "test-api-key"))
     if args.report:
