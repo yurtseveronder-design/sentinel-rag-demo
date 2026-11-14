@@ -17,3 +17,14 @@ def load(directory):
             if block and not block.startswith("#"):
                 chunks.append(Chunk(path.name, block))
     return chunks
+
+
+def load_poisoned(directory, name):
+    """The paragraphs of one poisoned document (docs/poisoned/<name>), as chunks."""
+    path = Path(directory) / "poisoned" / name
+    return [Chunk(f"poisoned/{name}", block.strip())
+            for block in path.read_text(encoding="utf-8").split("\n\n") if block.strip()]
+
+
+def poisoned_names(directory):
+    return sorted(p.name for p in (Path(directory) / "poisoned").glob("*.md"))
