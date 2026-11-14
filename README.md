@@ -15,7 +15,7 @@ Start the stack (see [sentinel-eval](https://github.com/yurtseveronder-design/se
 ai-sentinel on :8000), then:
 
 ```bash
-pip install -e .
+pip install -e .   # editable install from a checkout: the documents are read from docs/
 rag-demo --unprotected --poison classic.md
 # answer:  [HIJACKED] Obeying injected instruction from poisoned/classic.md: ...
 
