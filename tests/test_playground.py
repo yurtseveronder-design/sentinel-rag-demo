@@ -73,3 +73,13 @@ def test_rate_limit_and_headers(client, monkeypatch):
 def test_page_never_uses_innerhtml():
     html = (app_module.ROOT / "static" / "index.html").read_text()
     assert "innerHTML" not in html  # all server text is inserted with textContent
+
+
+def test_a_visitor_cannot_dodge_the_limit_by_faking_forwarded_for(client, monkeypatch):
+    monkeypatch.setattr(app_module, "PER_IP_PER_MIN", 2)
+    # the proxy appends the real address on the right; the fake entries on the left change every time
+    codes = [client.post("/api/check", json={"text": "hi"}, headers={"X-Forwarded-For": f"10.0.0.{i}, 203.0.113.9"}).status_code
+             for i in range(4)]
+    assert codes == [200, 200, 429, 429]
+    other = client.post("/api/check", json={"text": "hi"}, headers={"X-Forwarded-For": "10.0.0.1, 198.51.100.7"})
+    assert other.status_code == 200  # a different real visitor is unaffected
