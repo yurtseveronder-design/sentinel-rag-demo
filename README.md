@@ -1,5 +1,7 @@
 # sentinel-rag-demo
 
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/yurtseveronder-design/sentinel-rag-demo/blob/main/notebooks/try_sentinel.ipynb)
+
 A small RAG pipeline that shows **indirect prompt injection**, and how the Sentinel stack stops it.
 
 The document set contains no poison by default. `docs/poisoned/` holds eight poisoned documents in different wordings and languages, added to the corpus one at a time. Each is ordinary-looking company content, so a retriever happily returns it.
