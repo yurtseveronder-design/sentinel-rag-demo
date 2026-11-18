@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parent
 DOCS = Path(os.getenv("PLAYGROUND_DOCS", ROOT.parent / "docs"))
 MAX_CHARS = int(os.getenv("PLAYGROUND_MAX_CHARS", "2000"))
 PER_IP_PER_MIN = int(os.getenv("PLAYGROUND_PER_IP_PER_MIN", "30"))
+TRUSTED_PROXIES = max(1, int(os.getenv("PLAYGROUND_TRUSTED_PROXIES", "1")))
 GLOBAL_PER_MIN = int(os.getenv("PLAYGROUND_GLOBAL_PER_MIN", "600"))
 
 app = FastAPI(title="Sentinel playground", docs_url=None, redoc_url=None)
@@ -33,9 +34,11 @@ def pg() -> Playground:
 
 
 def _limited(request: Request) -> bool:
-    """Per-visitor and global caps. Behind a proxy the visitor is the first X-Forwarded-For entry."""
-    forwarded = request.headers.get("x-forwarded-for", "").split(",")[0].strip()
-    who = forwarded or (request.client.host if request.client else "unknown")
+    """Per-visitor and global caps."""
+    # Entries on the LEFT of X-Forwarded-For are written by the visitor and can be faked; the proxy appends the address
+    # it actually saw on the RIGHT. So the visitor is the Nth entry from the right (N = PLAYGROUND_TRUSTED_PROXIES).
+    parts = [p.strip() for p in request.headers.get("x-forwarded-for", "").split(",") if p.strip()]
+    who = (parts[-TRUSTED_PROXIES] if len(parts) >= TRUSTED_PROXIES else parts[0]) if parts else         (request.client.host if request.client else "unknown")
     now = time.monotonic()
     if len(_hits) > 10_000:  # bound memory under a flood of distinct addresses
         _hits.clear()
