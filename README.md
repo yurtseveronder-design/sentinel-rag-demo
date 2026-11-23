@@ -58,7 +58,7 @@ the full stack with the semantic layer is reported by CI on every run):
 
 * The "model" is a deterministic simulation. Swap in a real model by implementing `answer(question, context)`.
 * Retrieval is simple word overlap, and the report puts the poisoned text first (worst case).
-* Use the blind-set numbers in [sentinel-eval](https://github.com/yurtseveronder-design/sentinel-eval) for detection quality.
+* The blind-set numbers in [sentinel-eval](https://github.com/yurtseveronder-design/sentinel-eval) are dated and indicative (the set is used up); they are not a current benchmark.
 
 ## CI
 
