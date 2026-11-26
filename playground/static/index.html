@@ -36,7 +36,7 @@ Text you type is checked and then discarded; it is not stored.</p>
 </nav>
 
 <div class="row"><label for="mode"><b>Detector:</b></label><select id="mode"></select></div>
-<p class="muted small" id="modehelp">The default setup stops classic phrases; a trained classifier catches much more, including reworded and other-language attacks, at the cost of some false alarms.</p>
+<p class="muted small" id="modehelp">The default setup stops classic phrases; a pretrained public classifier catches much more, including reworded and other-language attacks, at the cost of some false alarms.</p>
 
 <section id="p1">
   <div class="row" id="examples"></div>
@@ -52,7 +52,7 @@ Text you type is checked and then discarded; it is not stored.</p>
 <div id="out" aria-live="polite"></div>
 
 <p class="muted small">Measured results, method and limits: <a href="https://github.com/yurtseveronder-design/sentinel-eval">sentinel-eval</a>.
-On a small blind test the default catches about 1 in 10 unseen attacks and the classifier modes 73-93%, each with some harmless prompts wrongly blocked.</p>
+On a small blind test (now used up; 2026-11-14/15) the default caught about 1 in 10 attacks, the ProtectAI mode 73% and the deepset mode 93%, with 8-12% of harmless prompts wrongly blocked.</p>
 <script>
 const $=id=>document.getElementById(id);
 let cfg=null;
